@@ -1,5 +1,9 @@
 # Discord Cog System Bot Template
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![discord.py](https://img.shields.io/badge/discord.py-v2.0%2B-blueviolet)](https://github.com/Rapptz/discord.py)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A modular, scalable, and production-ready Discord bot template built with [discord.py](https://github.com/Rapptz/discord.py). Features dynamic Cog extension loading, slash command synchronization, owner utilities (hot-reloading, restart, shutdown), environment-based configuration, and automated startup scripting.
 
 ---
