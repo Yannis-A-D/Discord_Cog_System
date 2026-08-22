@@ -5,18 +5,25 @@ from pathlib import Path
 from discord.ext import commands
 from discord import app_commands
 
-# Owner user IDs
-OWNER_USER_IDS = {1390183168157417522, 818106391411163217}
+# Helper function to get owner user IDs from environment
+def get_owner_user_ids() -> set[int]:
+    raw = os.getenv("OWNER_USER_IDS", "")
+    return {int(uid.strip()) for uid in raw.split(",") if uid.strip().isdigit()}
 
 class ExampleCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._synced = False
 
+    def is_owner(self, user_id: int) -> bool:
+        """Check if user ID is in OWNER_USER_IDS or is the application owner."""
+        owners = get_owner_user_ids()
+        return user_id in owners or user_id == getattr(self.bot, "owner_id", None)
+
     @commands.command(name="shutdown", aliases=["stop", "logout"])
     async def shutdown(self, ctx):
         """Owner-only command to cleanly shut down the bot."""
-        if ctx.author.id not in OWNER_USER_IDS:
+        if not self.is_owner(ctx.author.id):
             await ctx.send("Only the bot owner can use this command.")
             return
         await ctx.send("Shutting down — bye!")
@@ -25,7 +32,7 @@ class ExampleCog(commands.Cog):
     @commands.command(name="restart")
     async def restart(self, ctx):
         """Owner-only command to restart the bot."""
-        if ctx.author.id not in OWNER_USER_IDS:
+        if not self.is_owner(ctx.author.id):
             await ctx.send("Only the bot owner can use this command.")
             return
         await ctx.send("Restarting — be right back!")
@@ -36,7 +43,7 @@ class ExampleCog(commands.Cog):
     @app_commands.command(name="shutdown", description="Shut down the bot (owner only)")
     async def shutdown_slash(self, interaction: discord.Interaction):
         """Owner-only slash command to cleanly shut down the bot."""
-        if interaction.user.id not in OWNER_USER_IDS:
+        if not self.is_owner(interaction.user.id):
             await interaction.response.send_message("Only the bot owner can use this command.", ephemeral=True)
             return
 
@@ -46,7 +53,7 @@ class ExampleCog(commands.Cog):
     @app_commands.command(name="restart", description="Restart the bot (owner only)")
     async def restart_slash(self, interaction: discord.Interaction):
         """Owner-only slash command to restart the bot."""
-        if interaction.user.id not in OWNER_USER_IDS:
+        if not self.is_owner(interaction.user.id):
             await interaction.response.send_message("Only the bot owner can use this command.", ephemeral=True)
             return
 
@@ -116,7 +123,7 @@ class ExampleCog(commands.Cog):
     @commands.command(name="reload")
     async def reload(self, ctx, *, cog: str = 'all'):
         """Reload a cog or all cogs. Usage: !reload Ownerscmd | !reload all"""
-        if ctx.author.id not in OWNER_USER_IDS:
+        if not self.is_owner(ctx.author.id):
             await ctx.send("Only the bot owner can use this command.")
             return
         
@@ -155,7 +162,7 @@ class ExampleCog(commands.Cog):
     @app_commands.describe(cog='Name of cog to reload; use "all" to reload all')
     async def reload_slash(self, interaction: discord.Interaction, cog: str = 'all'):
         """Owner-only slash command to reload cogs."""
-        if interaction.user.id not in OWNER_USER_IDS:
+        if not self.is_owner(interaction.user.id):
             await interaction.response.send_message("Only the bot owner can use this command.", ephemeral=True)
             return
         

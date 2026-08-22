@@ -21,7 +21,7 @@ else:
 # Configuration
 TOKEN = os.getenv('DISCORD_TOKEN')
 PREFIX = os.getenv('PREFIX', '!')
-MASTER_USER_ID = 818106391411163217  # Master permissions for all commands
+MASTER_USER_ID = int(os.getenv('MASTER_USER_ID', 0)) if os.getenv('MASTER_USER_ID', '').strip().isdigit() else 0  # Optional master permissions for commands
 
 if not TOKEN:
     sys.exit("DISCORD_TOKEN not set. Add it to bot.env or the environment.")

@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import os
 
+from utils.helpers import ALLOWED_GUILD_ID, get_owner_ids
+
 class Sync(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -9,12 +11,12 @@ class Sync(commands.Cog):
     @commands.command(name="sync")
     async def sync(self, ctx):
         """Manually sync slash commands."""
-        if ctx.author.id not in (1390183168157417522, 818106391411163217):
+        owner_ids = get_owner_ids()
+        if ctx.author.id not in owner_ids and ctx.author.id != getattr(self.bot, "owner_id", None):
             await ctx.send("Only the bot owners can use this command.")
             return
         try:
-            from utils.helpers import ALLOWED_GUILD_ID
-            guild = self.bot.get_guild(ALLOWED_GUILD_ID)
+            guild = self.bot.get_guild(ALLOWED_GUILD_ID) if ALLOWED_GUILD_ID else None
             if guild:
                 await self.bot.tree.sync(guild=guild)
                 await ctx.send(f"Synced slash commands to guild `{guild.name}` ({guild.id})")

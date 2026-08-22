@@ -4,8 +4,13 @@ from typing import Optional, Union
 import discord
 from discord.ext import commands
 
-# Load guild ID from environment or fallback
-ALLOWED_GUILD_ID = int(os.getenv("ALLOWED_GUILD_ID", 1417342662993776692))
+# Load guild ID from environment
+ALLOWED_GUILD_ID = int(os.getenv("ALLOWED_GUILD_ID", 0)) if os.getenv("ALLOWED_GUILD_ID", "").strip().isdigit() else 0
+
+def get_owner_ids() -> set[int]:
+    """Parse comma-separated owner IDs from environment variable OWNER_USER_IDS."""
+    raw = os.getenv("OWNER_USER_IDS", "")
+    return {int(uid.strip()) for uid in raw.split(",") if uid.strip().isdigit()}
 
 async def is_allowed_guild_check(ctx: commands.Context) -> bool:
     """Check if command is used in the allowed guild."""
