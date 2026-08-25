@@ -10,9 +10,21 @@
 
 **A modular, production-ready Discord bot template built with [discord.py](https://github.com/Rapptz/discord.py).**
 
-*Features automatic Cog extension discovery, slash command sync, owner utilities (hot-reloading, restart, shutdown), multi-platform startup scripts, and native Docker containerization.*
+*Features automatic Cog extension discovery, slash command sync, owner utilities (hot-reloading, restart, shutdown), multi-platform startup scripts, with dedicated Docker and PM2 production branches.*
 
 </div>
+
+---
+
+## 🌿 Deployment Branches
+
+Choose the branch best suited for your deployment target:
+
+| Branch | Description | Key Files |
+| :--- | :--- | :--- |
+| 📦 **[`main`](https://github.com/Yannis-A-D/Discord_Cog_System)** | Default cross-platform template with auto-virtualenv startup scripts | `run_bot.bat`, `run_bot.py` |
+| 🐳 **[`docker`](https://github.com/Yannis-A-D/Discord_Cog_System/tree/docker)** | Containerized deployment with volume mounts for live cog reloading | `Dockerfile`, `docker-compose.yml` |
+| ⚡ **[`pm2`](https://github.com/Yannis-A-D/Discord_Cog_System/tree/pm2)** | Production process manager with auto-restart and reboot persistence | `ecosystem.config.js` |
 
 ---
 
