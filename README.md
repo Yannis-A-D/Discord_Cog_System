@@ -155,6 +155,7 @@ python src/bot.py
 | `!restart` | Prefix & Slash (`/restart`) | Gracefully restarts the bot process |
 | `!shutdown` | Prefix & Slash (`/shutdown`) | Safely disconnects and shuts down the bot |
 | `!sync` | Prefix | Manually forces a slash command tree sync with Discord |
+| `!uptime` | Prefix & Slash (`/uptime`) | Displays the bot's current uptime |
 
 ---
 
@@ -194,6 +195,12 @@ async def setup(bot: commands.Bot) -> None:
 
 > [!NOTE]
 > The bot will automatically detect and load your new cog on next launch. You can also run `!reload all` (or `/reload all`) in Discord to load it instantly without restarting!
+
+---
+
+## 🗄️ Database Integration
+
+A perfect database fit for this Cog System is the [🔐 Encrypted SQLite JSON & Two-Tier Caching Engine](../encrypted_sqlite_system) project located in the sibling folder. It provides a transparent, secure, and ultra-high-speed storage solution for your bot's persistent data (such as user settings, server configs, or logs) with sub-millisecond RAM caching and automatic encryption-at-rest.
 
 ---
 

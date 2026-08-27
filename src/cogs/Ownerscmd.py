@@ -14,6 +14,9 @@ class ExampleCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._synced = False
+        import datetime
+        if not hasattr(bot, "start_time"):
+            bot.start_time = datetime.datetime.now(datetime.timezone.utc)
 
     def is_owner(self, user_id: int) -> bool:
         """Check if user ID is in OWNER_USER_IDS or is the application owner."""
@@ -61,6 +64,54 @@ class ExampleCog(commands.Cog):
         await self.bot.close()
         python = sys.executable
         os.execv(python, [python] + sys.argv)
+
+    @commands.command(name="uptime")
+    async def uptime(self, ctx):
+        """Shows the bot's uptime."""
+        from discord.utils import utcnow
+        if not hasattr(self.bot, "start_time"):
+            import datetime
+            self.bot.start_time = datetime.datetime.now(datetime.timezone.utc)
+        
+        delta = utcnow() - self.bot.start_time
+        hours, remainder = divmod(int(delta.total_seconds()), 3600)
+        minutes, seconds = divmod(remainder, 60)
+        days, hours = divmod(hours, 24)
+        
+        parts = []
+        if days > 0:
+            parts.append(f"{days}d")
+        if hours > 0:
+            parts.append(f"{hours}h")
+        if minutes > 0:
+            parts.append(f"{minutes}m")
+        parts.append(f"{seconds}s")
+        
+        await ctx.send(f"Uptime: `{' '.join(parts)}`")
+
+    @app_commands.command(name="uptime", description="Show the bot's uptime")
+    async def uptime_slash(self, interaction: discord.Interaction):
+        """Slash command to show the bot's uptime."""
+        from discord.utils import utcnow
+        if not hasattr(self.bot, "start_time"):
+            import datetime
+            self.bot.start_time = datetime.datetime.now(datetime.timezone.utc)
+            
+        delta = utcnow() - self.bot.start_time
+        hours, remainder = divmod(int(delta.total_seconds()), 3600)
+        minutes, seconds = divmod(remainder, 60)
+        days, hours = divmod(hours, 24)
+        
+        parts = []
+        if days > 0:
+            parts.append(f"{days}d")
+        if hours > 0:
+            parts.append(f"{hours}h")
+        if minutes > 0:
+            parts.append(f"{minutes}m")
+        parts.append(f"{seconds}s")
+        
+        await interaction.response.send_message(f"Uptime: `{' '.join(parts)}`", ephemeral=True)
 
     async def _reload_cogs(self, cog: str):
         """Reload a specific cog or all cogs. Returns list of (module, ok, message)."""
@@ -225,5 +276,7 @@ async def setup(bot):
             bot.tree.add_command(cog.restart_slash)
         if bot.tree.get_command('reload') is None:
             bot.tree.add_command(cog.reload_slash)
+        if bot.tree.get_command('uptime') is None:
+            bot.tree.add_command(cog.uptime_slash)
     except Exception as e:
         print(f"Failed to add slash command(s): {e}")
