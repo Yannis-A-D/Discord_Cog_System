@@ -207,3 +207,9 @@ A perfect database fit for this Cog System is the [🔐 Encrypted SQLite JSON & 
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more details.
+
+---
+
+## ☕ Support the Project
+
+If you find this template useful, please consider giving the repository a **Star** on GitHub, or support development by [buying me a coffee](https://buymeacoffee.com/penguinyannis)!
